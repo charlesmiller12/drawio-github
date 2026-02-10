@@ -1,31 +1,84 @@
 # draw.io GitHub Integration
 
-Please read <a href="https://github.com/jgraph/drawio-integration" target="_blank">this</a> for a high-level introduction.
+Tools and examples for using [diagrams.net](https://www.diagrams.net) (formerly draw.io) with GitHub. Edit, store, and version-control diagrams directly in your repositories.
 
-GitHub support is now available https://app.diagrams.net/?mode=github
+For a high-level introduction, see the [draw.io Integration](https://github.com/jgraph/drawio-integration) documentation.
 
-An example for integration into GitHub wikis is available here: https://github.com/jgraph/drawio/wiki/Embed-Diagrams
+## Getting Started
 
---
+The simplest way to use draw.io with GitHub is the built-in GitHub mode:
 
-![Diagram](http://jgraph.github.io/drawio-github/diagram.png)
+**[Open diagrams.net with GitHub mode](https://app.diagrams.net/?mode=github)**
 
-<a href="http://jgraph.github.io/drawio-github/edit-diagram.html?repo=drawio-github&path=diagram.png" target="_blank">Edit</a> | <a href="https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fjgraph%2Fdrawio-github%2Fmaster%2Fdiagram.png" target="_blank">Edit As New</a> | <a href="https://app.diagrams.net/#Hjgraph%2Fdrawio-github%2Fmaster%2Fdiagram.png" target="_blank">Edit with draw.io</a>
+This lets you open, edit, and save `.drawio`, `.png`, `.svg`, and `.xml` diagram files directly from your GitHub repositories.
 
-<a href="http://jgraph.github.io/drawio-github/edit-diagram.html" target="_blank">edit-diagram.html</a> does the I/O with GitHub and uses draw.io in embed mode for diagram editing. The page supports the following URL parameters: user, pass, repo, path, ref and action=open (the Edit link above is an example). Using action=open, links for immediate diagram editing in GitHub can be created (requires user and pass parameters). You can also use files on GitHub as templates in draw.io via the url parameter (see Edit As New above).
+For embedding diagrams in GitHub wikis, see [Embed Diagrams](https://github.com/jgraph/drawio/wiki/Embed-Diagrams).
 
-Supported file formats: .png, .svg, .html and .xml (default)
+## Supported File Formats
+
+| Format | Description |
+|--------|-------------|
+| `.xml` | Default draw.io XML format |
+| `.png` | PNG with embedded XML (editable image) |
+| `.svg` | SVG with embedded XML (editable vector image) |
+| `.html` | HTML wrapper with embedded diagram |
+
+## Examples
+
+### Diagram Editor for GitHub
+
+![Diagram](https://jgraph.github.io/drawio-github/diagram.png)
+
+[Edit](https://jgraph.github.io/drawio-github/edit-diagram.html?repo=drawio-github&path=diagram.png) |
+[Edit As New](https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fjgraph%2Fdrawio-github%2Fmain%2Fdiagram.png) |
+[Edit with draw.io](https://app.diagrams.net/#Hjgraph%2Fdrawio-github%2Fmain%2Fdiagram.png)
+
+[`edit-diagram.html`](https://jgraph.github.io/drawio-github/edit-diagram.html) provides a simple UI for editing diagrams stored in GitHub. It uses the GitHub Contents API for file I/O and embeds diagrams.net as an editor.
+
+**URL parameters:**
+
+| Parameter | Description |
+|-----------|-------------|
+| `user` | GitHub username |
+| `pass` | GitHub password or personal access token |
+| `org` | GitHub organization or username |
+| `repo` | Repository name |
+| `path` | File path within the repository |
+| `ref` | Branch or tag (default: `main`) |
+| `action=open` | Immediately open the diagram for editing |
+
+### Self-Editing SVG
+
+![Self-editing Diagram](https://jgraph.github.io/drawio-github/self-editing.svg)
+
+[`self-editing.svg`](https://jgraph.github.io/drawio-github/self-editing.svg) is an SVG file with embedded PNG data. It works as a regular image (for `<img>` tags) but also supports in-place editing via JavaScript when opened directly. Click the link (not the image) to enable editing.
+
+### Self-Editing HTML
+
+[`self-editing.html`](https://jgraph.github.io/drawio-github/self-editing.html) is an HTML page with multiple embedded diagrams. It uses [`nanocms.js`](nanocms.js) for GitHub I/O and diagram editing, with Bootstrap for styling. Append `?action=edit` to the URL to enable editing and saving back to GitHub.
 
 ## Dark Mode
 
-[SVG dark mode support](DARK-MODE.md)
+SVG diagrams can adapt to light/dark themes using CSS. See [Dark Mode documentation](DARK-MODE.md) for details on:
 
-## Self-editing SVG file
+- Automatic dark mode via `prefers-color-scheme` media query
+- Manual dark mode via CSS `:target` pseudo-class
 
-![Self-editing Diagram](http://jgraph.github.io/drawio-github/self-editing.svg)
+| Light | Dark (system) | Dark (manual) |
+|-------|---------------|---------------|
+| ![Light](diagram-light-dark.svg) | ![System dark](diagram-light-dark.svg) | ![Manual dark](diagram-target-dark.svg#dark) |
 
-<a href="http://jgraph.github.io/drawio-github/self-editing.svg" target="_blank">self-editing.svg</a> is an SVG file with embedded PNG data (as a workaround for missing foreignObject support in Internet Explorer). This combines an image format (eg. for <img src="...") with scripting for GitHub integration. (Click on the link, not the image to enable editing.)
+## Project Structure
 
-## Self-editing HTML file
-
-<a href="http://jgraph.github.io/drawio-github/self-editing.html" target="_blank">self-editing.html</a> is a HTML file with embedded diagrams. The file uses nanocms.js for GitHub I/O and diagram editing, and Bootstrap and nanocms.css for some fancy CSS styles. HTML is used as a container for mutiple diagrams in different formats, including inline SVG with links.
+```
+├── edit-diagram.html        # Standalone diagram editor with GitHub integration
+├── self-editing.svg         # SVG with embedded editing capability
+├── self-editing.html        # HTML page with multiple editable diagrams
+├── nanocms.js               # JavaScript library for GitHub I/O and diagram editing
+├── nanocms.css              # Styles for embedded diagrams
+├── diagram.png              # Example PNG diagram
+├── diagram-light-dark.svg   # Example SVG with system dark mode
+├── diagram-target-dark.svg  # Example SVG with target-based dark mode
+├── DARK-MODE.md             # Dark mode documentation
+└── CLAUDE.md                # Development guidelines
+```

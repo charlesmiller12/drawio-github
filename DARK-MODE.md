@@ -1,4 +1,4 @@
-# diagrams.net Dark Mode in SVG with CSS
+# Dark Mode for SVG Diagrams
 
 ## CSS color-scheme
 
@@ -12,14 +12,15 @@ In v26.0.0 and later, the ``light-dark()`` color function is used in SVG with ``
 
 Information for SVG exported with versions prior to v26.0.0. below this line.
 
-## CSS prefers-color-scheme Media Feature
+draw.io SVG diagrams can automatically adapt to dark mode using CSS. There are two approaches depending on how much control you need.
 
-To support dark mode in SVG, add the following CSS to the SVG defs section:
+## Automatic: `prefers-color-scheme` Media Query
+
+This approach adapts the SVG automatically based on the user's system-level dark mode setting. Add the following CSS to the SVG `<defs>` section:
 
 ```css
 <style type="text/css">
-@media (prefers-color-scheme: dark)
-{
+@media (prefers-color-scheme: dark) {
     svg {
         filter: invert(93%) hue-rotate(180deg);
         background-color: transparent !important;
@@ -31,20 +32,19 @@ To support dark mode in SVG, add the following CSS to the SVG defs section:
 </style>
 ```
 
-This will change the SVG according to the current *system* setting. The light and
-dark color variables in the CSS can be changed to reflect the containing page
-(the above example is optimized for GitHub dark theme).
+The filter values above are optimized for GitHub's dark theme. Adjust `invert()` and `hue-rotate()` values to match your page's color scheme.
 
-<a href="https://raw.githubusercontent.com/jgraph/drawio-github/master/diagram-light-dark.svg" target="_blank">Here</a> is an example that will render in dark mode in GitHub markdown depending on your system setting:
+**Example** (renders in dark mode if your system is set to dark):
 
 ![Diagram with system dark mode](diagram-light-dark.svg)
 
-## CSS Target Pseudo-Class
+[View raw SVG](https://raw.githubusercontent.com/jgraph/drawio-github/main/diagram-light-dark.svg)
 
-If you need more control over dark mode in SVG images, the target CSS pseudo-class can be
-used as follows. This will enable dark mode if the image is loaded with a #dark hash
-property - or any other value that you assign to the SVG ID attribute. The media query
-must be removed and :target must be added, resulting in the following CSS:
+## Manual: CSS `:target` Pseudo-Class
+
+For explicit control over dark mode, use the `:target` pseudo-class. This enables dark mode when the image URL includes a `#dark` fragment (or any value matching the SVG's `id` attribute).
+
+Replace the media query with:
 
 ```css
 <style type="text/css">
@@ -60,19 +60,29 @@ svg:target[style^="background-color: rgb(255, 255, 255);"] {
 </style>
 ```
 
-Dark mode can now be enabled by adding #dark to the image source:
+Then toggle dark mode by appending `#dark` to the image source:
 
+```markdown
+<!-- Dark mode enabled -->
+![Diagram](diagram-target-dark.svg#dark)
+
+<!-- Light mode (no fragment) -->
+![Diagram](diagram-target-dark.svg)
+```
+
+**Dark:**
 ![Diagram with target dark mode](diagram-target-dark.svg#dark)
 
-To disable dark mode, remove #dark from the image source:
-
+**Light:**
 ![Diagram with target dark mode](diagram-target-dark.svg)
 
-In the following example, #dark is appended to the src attribute of
-all images matching *.drawio.svg if the page background is not white:
+### Dynamic Toggle with JavaScript
+
+To automatically enable dark mode for all draw.io SVGs when the page has a non-white background:
 
 ```js
-getComputedStyle(document.body).backgroundColor != 'rgba(0, 0, 0, 0)' ?
-	document.querySelectorAll('img[src$=".drawio.svg"]').forEach(
-		img => img.src += '#dark') : 0;
+if (getComputedStyle(document.body).backgroundColor !== 'rgba(0, 0, 0, 0)') {
+    document.querySelectorAll('img[src$=".drawio.svg"]')
+        .forEach(img => img.src += '#dark');
+}
 ```

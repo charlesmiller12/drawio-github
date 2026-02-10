@@ -7,7 +7,7 @@ var nanocms = function(elt)
 
 		for (var i = 0; i < params.length; i++)
 		{
-			idx = params[i].indexOf('=');
+			var idx = params[i].indexOf('=');
 
 			if (idx > 0)
 			{
