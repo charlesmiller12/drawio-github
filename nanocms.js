@@ -198,7 +198,7 @@ var nanocms = function(elt)
 				return;
 			}
 
-			var url = 'https://api.github.com/repos/' + org + '/' + repo +
+			var url = 'https://everest-github.mantech.com/api/v3/repos/' + org + '/' + repo +
 				'/contents/' + path + '?ref=' + encodeURIComponent(ref);
 
 			getSha(url, username, password, function(sha)
